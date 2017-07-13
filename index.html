@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="assets/js/javascript.js"></script>
 
 </head>
 
@@ -49,7 +48,7 @@
                       <th>Minutes Away</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id = "shuttleTable">
                     <tr>
                       <td>
                       1.
@@ -89,21 +88,21 @@
                   </div>
                   <div class="form-group">
                     <label for="email-input">🌎 Destination</label>
-                    <input class="form-control" id="email-input" type="text">
+                    <input class="form-control" id="destination-input" type="text">
                   </div>
                   <div class="form-group">
                     <label for="start-input">⌚ First Shuttle Time (HH:mm - military time)</label>
-                    <input class="form-control" id="age-input" type="text">
+                    <input class="form-control" id="firstshuttle-input" type="text">
                   </div>
                   <div class="form-group">
                     <label for="email-input">⏲ Frequency (min)</label>
-                    <input class="form-control" id="comment-input" type="text">
+                    <input class="form-control" id="frequency-input" type="text">
                   </div>
               <!-- <div class="form-group">
                 <label for="rate-input">Monthly Rate</label>
                 <input class="form-control" id="rate-input" type="text">
               </div> -->
-              <button class="btn btn-default" id="add-user" type="submit" style="background-color: #433172; color: white;">Submit</button> 
+              <button class="btn btn-default" id="add-shuttle" type="submit" style="background-color: #433172; color: white;">Submit</button> 
             </form>
           </div>
         </div>
@@ -113,7 +112,8 @@
 
 </body>
 
-<script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="assets/js/javascript.js"></script>
 
 </html>
