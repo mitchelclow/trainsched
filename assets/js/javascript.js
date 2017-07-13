@@ -22,7 +22,7 @@ var config = {
       var name = $("#shuttlename-input").val().trim();
       var email = $("#destination-input").val().trim();
       var age = $("#firstshuttle-input").val().trim();
-      var comment = $("#frequency-input").val().trim();
+      var comment = $("#frequency-input").val().trim();.
 
       database.ref().push({
         name: name,
