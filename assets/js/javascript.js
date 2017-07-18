@@ -3,33 +3,50 @@ var config = {
     authDomain: "shuttle-scheduler-790cb.firebaseapp.com",
     databaseURL: "https://shuttle-scheduler-790cb.firebaseio.com",
     projectId: "shuttle-scheduler-790cb",
-    storageBucket: "",
+    storageBucket: "shuttle-scheduler-790cb.appspot.com",
     messagingSenderId: "278110168247"
   };
   firebase.initializeApp(config);
 
   var database = firebase.database();
  
-  var name = "";
-  var email = "";
-  var age = 0;
-  var comment = "";
+  var shuttleName = "";
+  var destination = "";
+  var shuttleStartTime = 0;
+  var frequency = "";
     // Capture Button Click
-    $("#shuttle-user").on("click", function() {
+    $("#add-shuttle").on("click", function() {
       // Don't refresh the page!
       event.preventDefault();
 
-      var name = $("#shuttlename-input").val().trim();
-      var email = $("#destination-input").val().trim();
-      var age = $("#firstshuttle-input").val().trim();
-      var comment = $("#frequency-input").val().trim();.
+      var shuttleName = $("#shuttlename-input").val().trim();
+      var destination = $("#destination-input").val().trim();
+      var shuttleStartTime = $("#firstshuttle-input").val().trim();
+      var frequency = $("#frequency-input").val().trim();
 
-      database.ref().push({
+      // Read in the shuttle-start-time into the moment function
+      // e.g. moment(start-time, "HHmm")
+
+      // Turn the moment object into a string (someMomentObj.format("HH:mm"))
+      // (for putting it on the board)
+
+      // Add time increments to our moment object
+      // someMomentObj.add(10, "minutes")
+
+      // Keep adding minutes until we see that our moment obj is further ahead than the current time
+      // e.g. someMomentObj.diff(currentTimeMomentObj, "minutes")
+      // This gives us the number of minutes.
+      // Keep looping until the value is either negative or positive?
+
+      var newShuttle = {
         name: name,
         email: email,
         age: age,
         comment: comment
-      });
+      };
+
+      console.log(newShuttle);
+      database.ref().push(newShuttle);
     });
     // Firebase watcher + initial loader HINT: .on("value")
     database.ref().on("child_added", function(snapshot) {
