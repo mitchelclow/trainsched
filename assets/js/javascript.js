@@ -1,85 +1,66 @@
 var config = {
-    apiKey: "AIzaSyBXRQg4PZ2Np-v8oJrC6QBr8V3pwh3GiY4",
-    authDomain: "shuttle-scheduler-790cb.firebaseapp.com",
-    databaseURL: "https://shuttle-scheduler-790cb.firebaseio.com",
-    projectId: "shuttle-scheduler-790cb",
-    storageBucket: "shuttle-scheduler-790cb.appspot.com",
-    messagingSenderId: "278110168247"
+  apiKey: "AIzaSyBXRQg4PZ2Np-v8oJrC6QBr8V3pwh3GiY4",
+  authDomain: "shuttle-scheduler-790cb.firebaseapp.com",
+  databaseURL: "https://shuttle-scheduler-790cb.firebaseio.com",
+  projectId: "shuttle-scheduler-790cb",
+  storageBucket: "shuttle-scheduler-790cb.appspot.com",
+  messagingSenderId: "278110168247"
+};
+firebase.initializeApp(config);
+
+var database = firebase.database();
+
+// Capture Button Click
+$("#add-shuttle").on("click", function() {
+  // Don't refresh the page!
+  event.preventDefault();
+
+  var shuttleName = $("#shuttlename-input").val().trim();
+  var destination = $("#destination-input").val().trim();
+  var shuttleStartTime = $("#firstshuttle-input").val().trim();
+  var frequency = $("#frequency-input").val().trim();
+
+  var newShuttle = {
+    shuttleName: shuttleName,
+    destination: destination,
+    shuttleStartTime: shuttleStartTime,
+    frequency: frequency
   };
-  firebase.initializeApp(config);
+  database.ref().push(newShuttle);
+});
+// Firebase watcher + initial loader HINT: .on("value")
+database.ref().on("child_added", function(snapshot) {
+  // Log everything that's coming out of snapshot
+  var train = snapshot.val();
+  var shuttleStartTime = train.shuttle
 
-  var database = firebase.database();
- 
-  var shuttleName = "";
-  var destination = "";
-  var shuttleStartTime = 0;
-  var frequency = "";
-    // Capture Button Click
-    $("#add-shuttle").on("click", function() {
-      // Don't refresh the page!
-      event.preventDefault();
+  // Read in the shuttle-start-time into the moment function
+  var shuttleTimeMomentObj = moment(shuttleStartTime, "HH:mm");
+  var currentTimeMomentObj = moment();
+  while (shuttleTimeMomentObj.diff(currentTimeMomentObj, "minutes") < 0) {
+    shuttleTimeMomentObj.add(parseInt(frequency), "minutes");
+  }
 
-      var shuttleName = $("#shuttlename-input").val().trim();
-      var destination = $("#destination-input").val().trim();
-      var shuttleStartTime = $("#firstshuttle-input").val().trim();
-      var frequency = $("#frequency-input").val().trim();
+  var nextArrival = shuttleTimeMomentObj.format("HH:mm");
+  var minutesAway = shuttleTimeMomentObj.diff(currentTimeMomentObj, "minutes");
 
-      // Read in the shuttle-start-time into the moment function
-      // e.g. moment(start-time, "HHmm")
+  var tableRow = $(
+    "<tr>" +
+    "<td>" + + "</td>" +
+    "</tr>")
 
-      // Turn the moment object into a string (someMomentObj.format("HH:mm"))
-      // (for putting it on the board)
+  var tableRow = $("<tr>");
 
-      // Add time increments to our moment object
-      // someMomentObj.add(10, "minutes")
+  var shuttleName = $("<td>");
+  var destination = $("<td>");
+  var shuttleStartTime = $("<td>");
+  var frequency = $("<td>");
+  var nextArrival = $("<td>");
+  var minutesAway = $("<td>");
 
-      // Keep adding minutes until we see that our moment obj is further ahead than the current time
-      // e.g. someMomentObj.diff(currentTimeMomentObj, "minutes")
-      // This gives us the number of minutes.
-      // Keep looping until the value is either negative or positive?
+  $("#shuttleTable").prepend(tableRow);
 
-      var newShuttle = {
-        name: name,
-        email: email,
-        age: age,
-        comment: comment
-      };
-
-      console.log(newShuttle);
-      database.ref().push(newShuttle);
-    });
-    // Firebase watcher + initial loader HINT: .on("value")
-    database.ref().on("child_added", function(snapshot) {
-      // Log everything that's coming out of snapshot
-      console.log(snapshot.val());
-      console.log(snapshot.val().name);
-      console.log(snapshot.val().email);
-      console.log(snapshot.val().age);
-      console.log(snapshot.val().comment);
-
-      var tableRow = $("<tr>");
-
-      var shuttleName = $("<td>");
-      var destination = $("<td>");
-      var frequency = $("<td>");
-      var nextArrival = $("<td>");
-      var minutesAway = $("<td>");
-
-      shuttleName.html(snapshot.val().name);
-      destination.html(snapshot.val().email);
-      frequency.html(snapshot.val().age);
-      nextArrival.html(snapshot.val().comment);
-      minutesAway.html("hello");
-
-      tableRow.prepend(shuttleName);
-      tableRow.prepend(destination);
-      tableRow.prepend(frequency);
-      tableRow.prepend(nextArrival);
-      tableRow.prepend(minutesAway);
-
-      $("#shuttleTable").prepend(tableRow);
-
-      // Handle the errors
-    }, function(errorObject) {
-      console.log("Errors handled: " + errorObject.code);
-    });
+  // Handle the errors
+}, function(errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+});
