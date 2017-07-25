@@ -32,33 +32,29 @@ $("#add-shuttle").on("click", function() {
 database.ref().on("child_added", function(snapshot) {
   // Log everything that's coming out of snapshot
   var train = snapshot.val();
-  var shuttleStartTime = train.shuttle
 
   // Read in the shuttle-start-time into the moment function
-  var shuttleTimeMomentObj = moment(shuttleStartTime, "HH:mm");
+  var shuttleTimeMomentObj = moment(train.shuttleStartTime, "HH:mm");
   var currentTimeMomentObj = moment();
   while (shuttleTimeMomentObj.diff(currentTimeMomentObj, "minutes") < 0) {
-    shuttleTimeMomentObj.add(parseInt(frequency), "minutes");
+    shuttleTimeMomentObj.add(parseInt(train.frequency), "minutes");
   }
 
   var nextArrival = shuttleTimeMomentObj.format("HH:mm");
-  var minutesAway = shuttleTimeMomentObj.diff(currentTimeMomentObj, "minutes");
+  var minutesAway = shuttleTimeMomentObj.diff(currentTimeMomentObj, "minutes") + 1;
 
   var tableRow = $(
     "<tr>" +
-    "<td>" + + "</td>" +
-    "</tr>")
+    "<td>" + train.shuttleName + "</td>" +
+    "<td>" + train.destination + "</td>" +
+    "<td>" + train.shuttleStartTime + "</td>" +
+    "<td>" + train.frequency + "</td>" +
+    "<td>" + nextArrival + "</td>" +
+    "<td>" + minutesAway + "</td>" +
+    "</tr>");
 
-  var tableRow = $("<tr>");
-
-  var shuttleName = $("<td>");
-  var destination = $("<td>");
-  var shuttleStartTime = $("<td>");
-  var frequency = $("<td>");
-  var nextArrival = $("<td>");
-  var minutesAway = $("<td>");
-
-  $("#shuttleTable").prepend(tableRow);
+  $("#shuttleTable").append(tableRow);
+  $("#train-form")[0].reset();
 
   // Handle the errors
 }, function(errorObject) {
